@@ -13,6 +13,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.*;
+import android.widget.LinearLayout;
 import android.widget.RemoteViews.ActionException;
 import android.app.Activity;
 import android.content.Context;
@@ -30,7 +31,6 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
     public Point p1c,p2c;
     public Activity parentAct;
 
-
 	public GLView(Context context) {
 		super(context);
 		parentAct=(Activity)context;
@@ -38,6 +38,9 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		setOnTouchListener(this);
 	}
 	public void onDrawFrame(GL10 gl) {
+
+		line a=new line(0,0,0,1,1,1);
+		a.draw(gl);
 
 
 
@@ -51,6 +54,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 	}
 	public void onSurfaceCreated(GL10 gl, EGLConfig arg1) {
 
+		gl.glEnableClientState(gl.GL_VERTEX_ARRAY);
 	}
 	public boolean onTouch(View v, MotionEvent event) {
 		if(event.getAction()==event.ACTION_DOWN){
@@ -77,7 +81,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 			if(homeBtn==true){
 				homeBtnC+=event.getY()-lastY;
 				homeBtnC+=event.getX()-lastX;
-				if(homeBtnC==this.getHeight()/5)
+				if(homeBtnC>=this.getHeight()/5)
 					parentAct.setContentView(new DrawView(parentAct));
 
 			}
@@ -97,15 +101,11 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		return false;
 	}
 
-
-
-
-
 }
 
 
 
-class Square {
+class line {
 
 	private FloatBuffer vertexBuffer;
 
@@ -114,7 +114,7 @@ class Square {
 
 
 
-	public void line(float x,float y,float z,float x2,float y2,float z2) {
+	public line(float x,float y,float z,float x2,float y2,float z2) {
 
 
 
@@ -153,7 +153,7 @@ class Square {
 
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 
-		gl.glDrawElements(GL10.GL_TRIANGLES, 2,
+		gl.glDrawElements(GL10.GL_LINES, 2,
 				GL10.GL_UNSIGNED_SHORT, indexBuffer);
 
 
