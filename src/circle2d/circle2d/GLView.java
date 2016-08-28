@@ -25,11 +25,14 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 	public static GL10 gl;
 	public boolean homeBtn=false;
-    public int homeBtnC=0;
-    public int lastX,lastY;
+    public float homeBtnC=0;
+    public float lastX,lastY;
     public boolean p1=false,p2=false;
     public Point p1c,p2c;
     public Activity parentAct;
+    public line aaaaa;
+    float distanceFromKey;
+
 
 	public GLView(Context context) {
 		super(context);
@@ -39,8 +42,9 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 	}
 	public void onDrawFrame(GL10 gl) {
 
-		line a=new line(0,0,0,1,1,1);
-		a.draw(gl);
+		gl.glClear(gl.GL_COLOR_BUFFER_BIT);
+
+		aaaaa.draw(gl);
 
 
 
@@ -54,16 +58,21 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 	}
 	public void onSurfaceCreated(GL10 gl, EGLConfig arg1) {
 
+		aaaaa=new line(0,0,0,0.5f,0.5f,0.5f);
 		gl.glEnableClientState(gl.GL_VERTEX_ARRAY);
 	}
 	public boolean onTouch(View v, MotionEvent event) {
+
+
+
 		if(event.getAction()==event.ACTION_DOWN){
-			double distanceFromKey=Math.sqrt(
+			distanceFromKey=(float)Math.sqrt(
 					Math.pow(this.getWidth()/2-event.getX(),2)+
 					Math.pow(this.getHeight()-event.getY(),2)
 					);
-			if(distanceFromKey>this.getHeight()/5){
-				homeBtn=true;
+			if(distanceFromKey<this.getHeight()/5){
+				parentAct.setContentView(new DrawView(parentAct));
+
 			}
 			else{
 				homeBtn=false;
@@ -77,27 +86,40 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 			}
 		}
 
-		if(event.getAction()==event.ACTION_MOVE){
-			if(homeBtn==true){
-				homeBtnC+=event.getY()-lastY;
-				homeBtnC+=event.getX()-lastX;
-				if(homeBtnC>=this.getHeight()/5)
-					parentAct.setContentView(new DrawView(parentAct));
-
-			}
-			if(p2==true){
-				p2c.x=event.getX();
-				p2c.y=event.getY();
-			}
-			else{
-				p1c.x=event.getX();
-				p1c.y=event.getY();
-
-
-			}
-
-
-		}
+//		if(event.getAction()==event.ACTION_MOVE){
+//
+//			if(homeBtn){
+//				homeBtnC+=event.getY()-lastY;
+//				homeBtnC+=event.getX()-lastX;
+//
+//
+//
+//
+//				if(homeBtnC>=this.getHeight()/5)
+//					parentAct.setContentView(new DrawView(parentAct));
+//
+//			}
+//			if(p2==true){
+//				p2c.x=event.getX();
+//				p2c.y=event.getY();
+//			}
+//			else{
+//				p1c.x=event.getX();
+//				p1c.y=event.getY();
+//
+//
+//			}
+//
+//
+//		}
+//		if(event.getAction()==event.ACTION_UP){
+//			homeBtnC=0;
+//
+//
+//
+//		}
+		lastX=event.getX();
+		lastY=event.getY();
 		return false;
 	}
 
@@ -108,11 +130,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 class line {
 
 	private FloatBuffer vertexBuffer;
-
 	private ShortBuffer indexBuffer;
-
-
-
 
 	public line(float x,float y,float z,float x2,float y2,float z2) {
 
@@ -141,11 +159,6 @@ class line {
 		indexBuffer.put(indices);
 		indexBuffer.position(0);
 	}
-
-	/**
-	 * This function draws our square on screen.
-	 * @param gl
-	 */
 	public void draw(GL10 gl) {
 
 

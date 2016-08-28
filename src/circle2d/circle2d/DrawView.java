@@ -22,6 +22,7 @@ import android.view.View.OnTouchListener;
 
 public class DrawView extends View implements OnTouchListener {
 	public static DrawView d;
+	public static boolean end=false;
 
     private static final String TAG = "DrawView";
     public Handler h;
@@ -32,6 +33,7 @@ public class DrawView extends View implements OnTouchListener {
     static Activity parentActivity;
     public DrawView(Context context) {
     	super(context);
+    	end=false;
     	parentActivity=(Activity)context;
 
 
@@ -55,6 +57,7 @@ public class DrawView extends View implements OnTouchListener {
     	if (d1==null)
     		d1=new door();
     	if(d1.opened>=canvas.getWidth()/2-0.11){
+    		end=true;
 	    	parentActivity.setContentView(new GLView(parentActivity));
     	}
     	Paint white=new Paint();
@@ -237,7 +240,7 @@ class door{
 				int r=0;
 //				int offsetColor=1;
 				int offsetMove=1;
-				while(true){
+				while(!DrawView.d.end){
 					try {
 						Thread.sleep(4);
 					} catch (InterruptedException e) {
@@ -282,7 +285,7 @@ class door{
 		new Thread(new Runnable() {
 
 			public void run() {
-				while((!left&&!right)&&opened>0.1||opened<-0.1){
+				while(!DrawView.d.end&&((!left&&!right)&&opened>0.1||opened<-0.1)){
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
