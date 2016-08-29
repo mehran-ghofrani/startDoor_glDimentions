@@ -58,7 +58,8 @@ public class DrawView extends View implements OnTouchListener {
     		d1=new door();
     	if(d1.opened>=canvas.getWidth()/2-0.11){
     		end=true;
-	    	parentActivity.setContentView(new GLView(parentActivity));
+    		GLView glview=new GLView(parentActivity);
+	    	parentActivity.setContentView(glview);
     	}
     	Paint white=new Paint();
     	white.setColor(Color.WHITE);

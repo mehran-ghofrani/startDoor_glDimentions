@@ -47,8 +47,8 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 	}
 	public void onDrawFrame(GL10 gl) {
 
+		gl.glClearColor(1-(homeBtnC-1/5f), 1-(homeBtnC-1/5f), 1-(homeBtnC-1/5f),1-(homeBtnC-1/5f));
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT);
-
 
 
 
@@ -64,10 +64,15 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 	}
 	public void onSurfaceCreated(GL10 gl, EGLConfig arg1) {
-		homeBtnC=getHeight()/2.5f;
-		a=new circle(0, -1, 0.4f, (short)128);
+		gl.glClearColor(1, 1, 1, 0);
+		gl.glClear(gl.GL_COLOR_BUFFER_BIT);
+		homeBtnC=1/5f;
+		a=new circle(0, -1, homeBtnC, (short)128);
+		aaaaa=new line(-1, -1, 0, 1, 1, 0);
 		gl.glEnableClientState(gl.GL_VERTEX_ARRAY);
 		GLU.gluOrtho2D(gl, -(float)getWidth()/getHeight(),(float)getWidth()/getHeight(), -1, +1);
+		gl.glColor4f(0, 0, 0, 0);
+		gl.glClearColor(1, 1, 1, 0);
 	}
 	public boolean onTouch(View v, MotionEvent event) {
 
@@ -78,17 +83,21 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 			if(homeBtn){
-				homeBtnC+=firstY-event.getY();
-				homeBtnC+=(event.getX()-firstX)*Math.signum(firstX/getWidth()-0.5);
-				if(homeBtnC<=0)
-					homeBtnC=0;
-
-				a=new circle(0, -1, homeBtnC/1000, (short)16);
+				double screenSize=Math.sqrt(Math.pow(getHeight(), 2)+Math.pow(getWidth(), 2));
+				homeBtnC+=(firstY-event.getY())/screenSize*4;
+				homeBtnC+=(event.getX()-firstX)*Math.signum(firstX/getWidth()-0.5)/screenSize*4;
 
 
 
 
-				if(homeBtnC>=getHeight()/2.5)
+				a=new circle(0, -1, homeBtnC, (short)128);
+
+				if(homeBtnC<=1/5f)
+					homeBtnC=1/5f;
+
+
+
+				if(homeBtnC>=6/5f)
 					parentAct.setContentView(new DrawView(parentAct));
 
 			}
@@ -114,7 +123,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 					Math.pow(this.getWidth()/2-event.getX(),2)+
 					Math.pow(this.getHeight()-event.getY(),2)
 					);
-			if(distanceFromKey<this.getHeight()/5){
+			if(distanceFromKey<getHeight()*homeBtnC/2){
 				homeBtn=true;
 //				parentAct.setContentView(new DrawView(parentAct));
 
