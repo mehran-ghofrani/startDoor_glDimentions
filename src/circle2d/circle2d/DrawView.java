@@ -19,7 +19,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-
+import utils.*;
 public class DrawView extends View implements OnTouchListener {
 	public static DrawView d;
 	public static boolean end=false;
@@ -212,14 +212,7 @@ public class DrawView extends View implements OnTouchListener {
     }
 }
 
-class Point {
-    float x, y;
 
-    @Override
-    public String toString() {
-        return x + ", " + y;
-    }
-}
 class door{
 
 	boolean right=false;

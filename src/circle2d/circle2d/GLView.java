@@ -32,7 +32,8 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
     public Float firstX=null;
     public Float firstY=null;
     public boolean p1=false,p2=false;
-    public Point p1c,p2c;
+    public circle p1view,p2view;
+    public Point p1c=new Point(),p2c=new Point();
     public Activity parentAct;
     public line aaaaa;
     public circle a;
@@ -53,6 +54,8 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 		a.draw(gl);
+		p1view.draw(gl);
+		p2view.draw(gl);
 
 
 
@@ -73,8 +76,10 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		GLU.gluOrtho2D(gl, -(float)getWidth()/getHeight(),(float)getWidth()/getHeight(), -1, +1);
 		gl.glColor4f(0, 0, 0, 0);
 		gl.glClearColor(1, 1, 1, 0);
+		p1view=p2view=new circle(0, 0, 0, (short)16);
 	}
 	public boolean onTouch(View v, MotionEvent event) {
+		float screenSize=(float)Math.sqrt(Math.pow(getHeight(), 2)+Math.pow(getWidth(), 2));
 
 		if(event.getAction()==event.ACTION_MOVE){
 
@@ -83,7 +88,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 			if(homeBtn){
-				double screenSize=Math.sqrt(Math.pow(getHeight(), 2)+Math.pow(getWidth(), 2));
+
 				homeBtnC+=(firstY-event.getY())/screenSize*4;
 				homeBtnC+=(event.getX()-firstX)*Math.signum(firstX/getWidth()-0.5)/screenSize*4;
 
@@ -101,13 +106,24 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 					parentAct.setContentView(new DrawView(parentAct));
 
 			}
-			if(p2==true){
-//				p2c.x=event.getX();
-//				p2c.y=event.getY();
+			float glEventcX=((event.getX()/(float)getWidth())*(2*((float)getWidth()/getHeight())))-((float)getWidth()/getHeight());
+			float glEventcY=event.getY()/getHeight()*-2+1;
+
+			double distance1=Math.sqrt(Math.pow(p1c.x-glEventcX, 2)+Math.pow(p1c.y-glEventcY, 2));
+			double distance2=Math.sqrt(Math.pow(p2c.x-glEventcX, 2)+Math.pow(p2c.y-glEventcY, 2));
+
+			if(p2){
+				p2c.x=glEventcX;
+				p2c.y=glEventcY;
+				p2view=new circle(p2c.x, p2c.y, screenSize/100000, (short)128);
+//				p1view=new circle(p1c.x, p1c.y, screenSize/50000, (short)128);
+
 			}
 			else{
-//				p1c.x=event.getX();
-//				p1c.y=event.getY();
+				p1c.x=glEventcX;
+				p1c.y=glEventcY;
+				p1view=new circle(p1c.x, p1c.y, screenSize/100000, (short)128);
+//				p2view=new circle(p2c.x, p2c.y, screenSize/50000, (short)128);
 
 
 			}
@@ -119,24 +135,43 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		if(event.getAction()==event.ACTION_DOWN){
 			firstX=event.getX();
 			firstY=event.getY();
+			p2=!p2;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+			float glEventcX=((event.getX()/(float)getWidth())*(2*((float)getWidth()/getHeight())))-((float)getWidth()/getHeight());
+			float glEventcY=event.getY()/getHeight()*-2+1;
+
+			double distance1=Math.sqrt(Math.pow(p1c.x-glEventcX, 2)+Math.pow(p1c.y-glEventcY, 2));
+			double distance2=Math.sqrt(Math.pow(p2c.x-glEventcX, 2)+Math.pow(p2c.y-glEventcY, 2));
+
+			if(p2){
+				p2c.x=glEventcX;
+				p2c.y=glEventcY;
+				p2view=new circle(p2c.x, p2c.y, screenSize/100000, (short)128);
+//				p1view=new circle(p1c.x, p1c.y, screenSize/50000, (short)128);
+
+			}
+			else{
+				p1c.x=glEventcX;
+				p1c.y=glEventcY;
+				p1view=new circle(p1c.x, p1c.y, screenSize/100000, (short)128);
+//				p2view=new circle(p2c.x, p2c.y, screenSize/50000, (short)128);
+
+			}
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
 			distanceFromKey=(float)Math.sqrt(
 					Math.pow(this.getWidth()/2-event.getX(),2)+
 					Math.pow(this.getHeight()-event.getY(),2)
 					);
 			if(distanceFromKey<getHeight()*homeBtnC/2){
 				homeBtn=true;
-//				parentAct.setContentView(new DrawView(parentAct));
 
 			}
 			else{
 				homeBtn=false;
 
-				if(p2)
-					p1=p2=false;
-				if(p1)
-					p2=true;
-				else
-					p1=true;
+
 			}
 		}
 
