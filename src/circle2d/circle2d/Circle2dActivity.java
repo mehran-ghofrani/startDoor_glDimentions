@@ -4,13 +4,22 @@ import android.R.layout;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsoluteLayout;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class Circle2dActivity extends Activity {
 
 	static DrawView drawView;
 	static DrawView drawView2;
+	public static int h,w;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,6 +31,24 @@ public class Circle2dActivity extends Activity {
         drawView = new DrawView(this);
         setContentView(drawView);
         drawView.requestFocus();
+
+
+
+
+        h=getWindowManager().getDefaultDisplay().getHeight();
+        w=getWindowManager().getDefaultDisplay().getWidth();
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -16,9 +16,13 @@ import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.provider.OpenableColumns;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import utils.*;
 public class DrawView extends View implements OnTouchListener {
 	public static DrawView d;
@@ -58,8 +62,22 @@ public class DrawView extends View implements OnTouchListener {
     		d1=new door();
     	if(d1.opened>=canvas.getWidth()/2-0.11){
     		end=true;
-    		GLView glview=new GLView(parentActivity);
-	    	parentActivity.setContentView(glview);
+
+	    	parentActivity.setContentView(new GLView(parentActivity));
+
+
+	    	GLView.rl = new RelativeLayout(parentActivity);
+	        GLView.tv = new TextView(parentActivity);
+	        GLView.tv.setTextSize(getWidth()*getHeight()/20000);
+	        GLView.params = new RelativeLayout.LayoutParams(((Circle2dActivity)parentActivity).w,((Circle2dActivity)parentActivity).h);
+	        GLView.rl.addView(GLView.tv, GLView.params);
+	        parentActivity.addContentView(GLView.rl,  new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+
+
+
+
+
+
     	}
     	Paint white=new Paint();
     	white.setColor(Color.WHITE);

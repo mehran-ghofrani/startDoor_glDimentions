@@ -1,30 +1,27 @@
 package utils;
 
-
-
 public class Lines {
 
+	float height;
+	float width;
+	float depth;
 
-	final Point cordinates=new Point(0,0,0);
-	final Point box=new Point(0,0,0);
-	final Point lcd=new Point(0,0,0);
-
-	public Point location;
-	public Point center;
-
+	float zFront;
+	float xFrontCenter;
 
 
+	float screenH;
+	float screenW;
+	//O=screenO
 
-
-	Lines(float x,float y,float x1,float y1,float width,float height){
-
-
-
+	Lines(float xTopRight,float yTopRight,float zTopRight,
+			float xTopLeft,float yTopLeft,float zTopLeft){
 
 
 
-	}
-	public void draw(){
+		float xTopRightV=xTopRight-xTopLeft;
+		float yTopLeftV=yTopRight-yTopLeft;
+
 
 
 
