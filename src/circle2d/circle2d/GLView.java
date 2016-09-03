@@ -180,10 +180,43 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 //				pView=new line(p2c.x, p2c.y, 0,p1c.x,p1c.y,0);
 //
 //			}
+
+
+			float x=glEventcX-p2c.x;
+			float y=glEventcY-p2c.y;
+
 			if(p1){
-				p1c.x=glEventcX;
-				p1c.y=glEventcY;
-				pView=new line(p2c.x, p2c.y, 0,p1c.x,p1c.y,0);
+				if(y>x&&y>-x){
+					p1c.y=glEventcY;
+					p1c.x=p2c.x+glEventcY;
+				}
+				if(y<x&&y>-x){
+					p1c.y=glEventcY;
+					p1c.x=p2c.x+glEventcY;
+				}
+				if(y<x&&y<-x){
+					p1c.y=glEventcY;
+					p1c.x=p2c.x;
+				}
+				if(y>x&&y<-x){
+					p1c.x=glEventcX;
+					p1c.y=p2c.y;
+				}
+
+				float x2=p1c.x-p2c.x;
+				float y2=p1c.y-p2c.y;
+				if(Math.abs(x2-y2)<0.001&&x2<0)////notworking
+					x2=y2=0;
+
+
+
+
+
+
+
+//				p1c.x=glEventcX;
+//				p1c.y=glEventcY;
+//				pView=new line(p2c.x, p2c.y, 0,p1c.x,p1c.y,0);
 
 
 			}
