@@ -52,16 +52,22 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
     public line aaaaa;
     public circle a;
     float distanceFromKey;
+    float screenSize;
+    float lit;
+    float litInc=0.01f;
+    circle menuKey;
 
 
 	public GLView(Context context) {
+
 		super(context);
+
 		parentAct=(Activity)context;
 		setRenderer(this);
 		setOnTouchListener(this);
 
-		p2c.x=(45+21/2)*cmToGL;
-		p2c.y=(34-(53/2))*cmToGL;
+		p2c.x=(21/2)*cmToGL;
+		p2c.y=(34-53/2)*cmToGL;
 
 
 
@@ -78,15 +84,28 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 		if(!homeBtn&&homeBtnC>0.2){
-			homeBtnC-=0.1;
+			if(lit>1)
+				litInc=-0.01f;
+			if(lit<0)
+				litInc=0.01f;
+			lit+=litInc;
+
+			gl.glColor4f(lit, lit, lit, 0);
+			homeBtnC-=(homeBtnC-0.2)/10;///////executes forever
 			a=new circle(0, -1, homeBtnC, (short)4);
 		}
 
 
+
+
 		a.draw(gl);
+		gl.glColor4f(0, 0, 0, 0);
+
 		pView.draw(gl);
 		c.draw(gl);
 //		c2.draw(gl);
+
+		menuKey.draw(gl);
 
 
 
@@ -99,22 +118,26 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 	}
 	public void onSurfaceCreated(GL10 gl, EGLConfig arg1) {
+		screenSize=(float)Math.sqrt(Math.pow(getHeight(), 2)+Math.pow(getWidth(), 2));
+
 		gl.glClearColor(1, 1, 1, 0);
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT);
-		homeBtnC=1/5f;
-		a=new circle(0, -1, homeBtnC, (short)128);
-		aaaaa=new line(-1, -1, 0, 1, 1, 0);
-		c=new circle(0,0,0,(short)0);
+		homeBtnC=0.4f;
+//		a=new circle(0, -1, homeBtnC, (short)128);
+//		aaaaa=new line(-1, -1, 0, 1, 1, 0);
+
 		c2=new circle(0,0,0,(short)0);
 		gl.glEnableClientState(gl.GL_VERTEX_ARRAY);
 		GLU.gluOrtho2D(gl,-(float)getWidth()/getHeight(),(float)getWidth()/getHeight(), -1, +1);
 		gl.glColor4f(0, 0, 0, 0);
 		gl.glClearColor(1, 1, 1, 0);
-		p1c.x=p1c.y=p2c.y=0;
-		p2c.x=1;
-		pView=new line(0, 0, 0, 1,0,0);
+		p1c.x=p2c.x;
+		p1c.y=p1c.y-screenSize/10000;
 
+		pView=new line(p1c.x, p1c.y, 0, p2c.x,p2c.y,0);
+		c=new circle(p1c.x, p1c.y, screenSize/100000, (short)19);
 
+		menuKey=new circle(0, 0, 0.3f, (short)6);
 
 //		RelativeLayout rl = new RelativeLayout(parentAct);
 //        TextView tv = new TextView(parentAct);
@@ -137,7 +160,6 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 	}
 	public boolean onTouch(View v, MotionEvent event) {
-		float screenSize=(float)Math.sqrt(Math.pow(getHeight(), 2)+Math.pow(getWidth(), 2));
 
 		if(event.getAction()==event.ACTION_MOVE){
 
@@ -171,8 +193,8 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 			float glEventcX=((event.getX()/(float)getWidth())*(2*((float)getWidth()/getHeight())))-((float)getWidth()/getHeight());
 			float glEventcY=event.getY()/getHeight()*-2+1;
 
-			double distance1=Math.sqrt(Math.pow(p1c.x-glEventcX, 2)+Math.pow(p1c.y-glEventcY, 2));
-			double distance2=Math.sqrt(Math.pow(p2c.x-glEventcX, 2)+Math.pow(p2c.y-glEventcY, 2));
+//			double distance1=Math.sqrt(Math.pow(p1c.x-glEventcX, 2)+Math.pow(p1c.y-glEventcY, 2));
+//			double distance2=Math.sqrt(Math.pow(p2c.x-glEventcX, 2)+Math.pow(p2c.y-glEventcY, 2));
 
 //			if(p2){
 //				p2c.x=glEventcX;
@@ -186,27 +208,29 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 			float y=glEventcY-p2c.y;
 
 			if(p1){
-				if(y>x&&y>-x){
-					p1c.y=glEventcY;
-					p1c.x=p2c.x+glEventcY;
-				}
-				if(y<x&&y>-x){
-					p1c.y=glEventcY;
-					p1c.x=p2c.x+glEventcY;
-				}
+
 				if(y<x&&y<-x){
 					p1c.y=glEventcY;
 					p1c.x=p2c.x;
-				}
-				if(y>x&&y<-x){
-					p1c.x=glEventcX;
+				}else
+				if(y<0){
 					p1c.y=p2c.y;
-				}
+					p1c.x=glEventcX;
+				}else
+					{
+					p1c.x=glEventcX;
+					p1c.y=glEventcY;
 
-				float x2=p1c.x-p2c.x;
-				float y2=p1c.y-p2c.y;
-				if(Math.abs(x2-y2)<0.001&&x2<0)////notworking
-					x2=y2=0;
+
+
+
+				}
+				pView=new line(p2c.x, p2c.y, 0,p1c.x,p1c.y,0);
+
+
+
+
+
 
 
 
@@ -268,11 +292,11 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 		c=new circle(p1c.x, p1c.y, screenSize/100000, (short)19);
-		c2=new circle(p2c.x, p2c.y, screenSize/100000, (short)19);
+//		c2=new circle(p2c.x, p2c.y, screenSize/100000, (short)19);
 		parentAct.runOnUiThread(new Runnable() {
 
 			public void run() {
-				tv.setText((int)(Math.sqrt(Math.pow(p1c.x-p2c.x, 2)+Math.pow(p1c.y-p2c.y, 2))/cmToGL)+"");
+				tv.setText((int)(Math.sqrt(Math.pow(p1c.x-p2c.x, 2)+Math.pow(p1c.y-p2c.y, 2))/cmToGL)+"cm");
 
 				params.setMargins((int)(getWidth()*(  ((p1c.x/((float)getWidth()/getHeight())+1)/2)  )), (int)(getHeight()*(p1c.y-1)/-2), 0, 0);
 

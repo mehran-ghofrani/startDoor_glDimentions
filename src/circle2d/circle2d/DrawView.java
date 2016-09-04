@@ -68,12 +68,21 @@ public class DrawView extends View implements OnTouchListener {
 
 	    	GLView.rl = new RelativeLayout(parentActivity);
 	        GLView.tv = new TextView(parentActivity);
-	        GLView.tv.setTextSize(getWidth()*getHeight()/20000);
+	        GLView.tv.setTextSize(getWidth()*getHeight()/40000);
 	        GLView.params = new RelativeLayout.LayoutParams(((Circle2dActivity)parentActivity).w,((Circle2dActivity)parentActivity).h);
 	        GLView.rl.addView(GLView.tv, GLView.params);
+
+
+	        TextView tv2=new TextView(parentActivity);
+	        tv2.setTextSize(getWidth()*getHeight()/40000);
+	        tv2.setText("darg up");
+	        RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(((Circle2dActivity)parentActivity).w,((Circle2dActivity)parentActivity).h);
+	        GLView.rl.addView(tv2,params2);
+	        params2.setMargins((int)(getWidth()*0.47), (int)(getHeight()*0.95), 0, 0);
+
+
+
 	        parentActivity.addContentView(GLView.rl,  new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-
-
 
 
 
