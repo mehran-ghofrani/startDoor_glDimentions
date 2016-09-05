@@ -28,20 +28,17 @@ public class circle {
 		short[] indices = new short[parts+2];
 		float[] vertices = new float[(parts+1)*3];
 
-		vertices[0]=0;
-		vertices[1]=0;
-		vertices[2]=0;
+
 		for(short i=1;i<=parts;i++){
 			float deg=((i-1)/(float)parts)*(float)2*(float)Math.PI;
 			vertices[i*3]=(float)Math.cos(deg);
 			vertices[i*3+1]=(float)Math.sin(deg);
 
-//			vertices[i*3+2]=0;
 		}
 
 
 		indices[parts+1]=1;
-		for(short i=0;i<=parts;i++){
+		for(short i=1;i<=parts;i++){
 
 			indices[i]=i;
 
@@ -80,7 +77,7 @@ public class circle {
 		gl.glMatrixMode(gl.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glTranslatef(x, y, 0);
-		gl.glScalef(r, r, r);
+		gl.glScalef(r, r, 0);
 
 
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);

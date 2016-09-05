@@ -14,7 +14,16 @@ public class Button extends circle {
 		}
 	void click(float x,float y){
 
-//		if(Math.sqrt(Math.pow(x-vertexBuffer[0], 2)+Math.pow(y-vertexBuffer[1], 2));
+		if(Math.sqrt(Math.pow(x-this.x, 2)+Math.pow(y-this.y, 2))<r){
+
+
+
+
+
+
+
+
+		}
 
 
 
