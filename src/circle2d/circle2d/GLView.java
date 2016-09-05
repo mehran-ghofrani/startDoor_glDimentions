@@ -73,10 +73,10 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 
-
-
-
 	}
+
+
+	
 	public void onDrawFrame(GL10 gl) {
 
 		gl.glClearColor(1-(homeBtnC/1.5f-1/5f), 1-(homeBtnC/1.5f-1/5f), 1-(homeBtnC/1.5f-1/5f),1-(homeBtnC/1.5f-1/5f));
@@ -93,6 +93,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 			gl.glColor4f(lit, lit, lit, 0);
 			homeBtnC-=(homeBtnC-0.2)/10;///////executes forever
 			a=new circle(0, -1, homeBtnC, (short)4);
+
 		}
 
 
@@ -128,7 +129,9 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 		c2=new circle(0,0,0,(short)0);
 		gl.glEnableClientState(gl.GL_VERTEX_ARRAY);
+		gl.glMatrixMode(gl.GL_PROJECTION);
 		GLU.gluOrtho2D(gl,-(float)getWidth()/getHeight(),(float)getWidth()/getHeight(), -1, +1);
+		gl.glMatrixMode(gl.GL_MODELVIEW);
 		gl.glColor4f(0, 0, 0, 0);
 		gl.glClearColor(1, 1, 1, 0);
 		p1c.x=p2c.x;
@@ -286,6 +289,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		if(event.getAction()==event.ACTION_UP){
 
 
+			homeBtn=false;
 
 
 		}
@@ -296,7 +300,11 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		parentAct.runOnUiThread(new Runnable() {
 
 			public void run() {
-				tv.setText((int)(Math.sqrt(Math.pow(p1c.x-p2c.x, 2)+Math.pow(p1c.y-p2c.y, 2))/cmToGL)+"cm");
+				double a=(Math.sqrt(Math.pow(p1c.x-p2c.x, 2)+Math.pow(p1c.y-p2c.y, 2))/cmToGL);
+
+
+
+				tv.setText(String.format( "%.2f", a )+" cm");
 
 				params.setMargins((int)(getWidth()*(  ((p1c.x/((float)getWidth()/getHeight())+1)/2)  )), (int)(getHeight()*(p1c.y-1)/-2), 0, 0);
 

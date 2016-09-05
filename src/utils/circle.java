@@ -8,28 +8,35 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 public class circle {
-	private FloatBuffer vertexBuffer;
-	private ShortBuffer indexBuffer;
-	private int indicesL;
+	FloatBuffer vertexBuffer;
+	ShortBuffer indexBuffer;
+	float x;
+	float y;
+	float r;
+	float parts;
+
+
 
 	public circle(float x,float y,float r,short parts) {
 
 
+		this.r=r;
+		this.x=x;
+		this.y=y;
 
-		indicesL=parts+2;
+
 		short[] indices = new short[parts+2];
-		float vertices[] = new float[(parts+1)*3];
+		float[] vertices = new float[(parts+1)*3];
 
-		vertices[0]=x;
-		vertices[1]=y;
+		vertices[0]=0;
+		vertices[1]=0;
 		vertices[2]=0;
 		for(short i=1;i<=parts;i++){
 			float deg=((i-1)/(float)parts)*(float)2*(float)Math.PI;
-			float rx=r*(float)Math.cos(deg);
-			float ry=r*(float)Math.sin(deg);
-			vertices[i*3]=x+rx;
-			vertices[i*3+1]=y+ry;
-			vertices[i*3+2]=0;
+			vertices[i*3]=(float)Math.cos(deg);
+			vertices[i*3+1]=(float)Math.sin(deg);
+
+//			vertices[i*3+2]=0;
 		}
 
 
@@ -59,14 +66,31 @@ public class circle {
 		indexBuffer.put(indices);
 		indexBuffer.position(0);
 	}
+
+	public void setLoc(float x,float y){
+		this.x=x;
+		this.y=y;
+	}
+	public void setRad(float r){
+		this.r=r;
+	}
 	public void draw(GL10 gl) {
 
+
+		gl.glMatrixMode(gl.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		gl.glTranslatef(x, y, 0);
+		gl.glScalef(r, r, r);
 
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 
-		gl.glDrawElements(GL10.GL_TRIANGLE_FAN, indicesL,
+		gl.glDrawElements(GL10.GL_TRIANGLE_FAN, indexBuffer.capacity(),
 				GL10.GL_UNSIGNED_SHORT, indexBuffer);
+
+		gl.glLoadIdentity();
+
+
 	}
 }

@@ -17,7 +17,7 @@ public class line {
 
 
 		short[] indices = { 0, 1};
-		float vertices[] = {
+		float[] vertices = {
 				      x,  y, z,  // 0, Top Left
 				      x2,y2, z2,  // 1, Bottom Left
 				};
@@ -42,6 +42,7 @@ public class line {
 	public void draw(GL10 gl) {
 
 
+		gl.glLoadIdentity();
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);

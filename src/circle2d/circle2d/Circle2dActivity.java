@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,7 +31,7 @@ public class Circle2dActivity extends Activity {
         drawView = new DrawView(this);
         setContentView(drawView);
         drawView.requestFocus();
-
+//        setContentView(new GLView(this));
 
 
 

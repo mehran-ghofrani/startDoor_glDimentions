@@ -1,5 +1,8 @@
 package utils;
 
+import java.nio.FloatBuffer;
+
+import android.graphics.Canvas.VertexMode;
 import android.view.View.OnClickListener;
 import android.widget.RemoteViews.ActionException;
 
@@ -9,4 +12,15 @@ public class Button extends circle {
 		super(x,y,r,(short)6);
 		this.listener=listener;
 		}
+	void click(float x,float y){
+
+//		if(Math.sqrt(Math.pow(x-vertexBuffer[0], 2)+Math.pow(y-vertexBuffer[1], 2));
+
+
+
+
+
+
+
+	}
 }
