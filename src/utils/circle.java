@@ -13,7 +13,7 @@ public class circle {
 	float x;
 	float y;
 	float r;
-	float parts;
+
 
 
 
@@ -82,7 +82,6 @@ public class circle {
 		gl.glTranslatef(x, y, 0);
 		gl.glScalef(r, r, r);
 
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 

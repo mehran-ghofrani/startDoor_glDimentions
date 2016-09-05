@@ -76,7 +76,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 	}
 
 
-	
+
 	public void onDrawFrame(GL10 gl) {
 
 		gl.glClearColor(1-(homeBtnC/1.5f-1/5f), 1-(homeBtnC/1.5f-1/5f), 1-(homeBtnC/1.5f-1/5f),1-(homeBtnC/1.5f-1/5f));
@@ -92,7 +92,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 			gl.glColor4f(lit, lit, lit, 0);
 			homeBtnC-=(homeBtnC-0.2)/10;///////executes forever
-			a=new circle(0, -1, homeBtnC, (short)4);
+			a.setRad(homeBtnC);
 
 		}
 
@@ -136,8 +136,9 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		gl.glClearColor(1, 1, 1, 0);
 		p1c.x=p2c.x;
 		p1c.y=p1c.y-screenSize/10000;
+		a=new circle(0, -1, homeBtnC, (short)4);
 
-		pView=new line(p1c.x, p1c.y, 0, p2c.x,p2c.y,0);
+		pView=new line(p1c.x, p1c.y, p2c.x,p2c.y);
 		c=new circle(p1c.x, p1c.y, screenSize/100000, (short)19);
 
 		menuKey=new circle(0, 0, 0.3f, (short)6);
@@ -178,7 +179,8 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 
-				a=new circle(0, -1, homeBtnC, (short)4);
+				a.setRad(homeBtnC);
+
 
 				if(homeBtnC<=1/5f)
 					homeBtnC=1/5f;
@@ -228,7 +230,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 				}
-				pView=new line(p2c.x, p2c.y, 0,p1c.x,p1c.y,0);
+				pView=new line(p2c.x, p2c.y,p1c.x,p1c.y);
 
 
 
@@ -295,7 +297,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		}
 
 
-		c=new circle(p1c.x, p1c.y, screenSize/100000, (short)19);
+		c.setLoc(p1c.x, p1c.y);
 //		c2=new circle(p2c.x, p2c.y, screenSize/100000, (short)19);
 		parentAct.runOnUiThread(new Runnable() {
 
