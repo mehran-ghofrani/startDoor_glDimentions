@@ -28,10 +28,10 @@ public class Circle2dActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        drawView = new DrawView(this);
-        setContentView(drawView);
-        drawView.requestFocus();
-//        setContentView(new GLView(this));
+//        drawView = new DrawView(this);
+//        setContentView(drawView);
+//        drawView.requestFocus();
+        setContentView(new GLView(this));
 
 
 

@@ -8,6 +8,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 public class circle {
+
 	FloatBuffer vertexBuffer;
 	ShortBuffer indexBuffer;
 	float x;
@@ -74,6 +75,7 @@ public class circle {
 	public void draw(GL10 gl) {
 
 
+		gl.glLoadIdentity();
 		gl.glMatrixMode(gl.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glTranslatef(x, y, 0);

@@ -12,6 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import org.w3c.dom.Text;
 
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.os.PowerManager;
+import android.util.Log;
 import utils.*;
 
 
@@ -55,7 +57,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
     float screenSize;
     float lit;
     float litInc=0.01f;
-    circle menuKey;
+    utils.Button menuKey;
 
 
 	public GLView(Context context) {
@@ -68,6 +70,12 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 		p2c.x=(21/2)*cmToGL;
 		p2c.y=(34-53/2)*cmToGL;
+
+
+
+
+
+
 
 
 
@@ -115,10 +123,53 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 	}
-	public void onSurfaceChanged(GL10 arg0, int arg1, int arg2) {
+	public void onSurfaceChanged(GL10 gl, int arg1, int arg2) {
+
+//		GLU.gluOrtho2D(gl,-(float)getWidth()/getHeight(),(float)getWidth()/getHeight(), -1, +1);
+
 
 	}
 	public void onSurfaceCreated(GL10 gl, EGLConfig arg1) {
+
+
+
+
+
+
+
+		parentAct.runOnUiThread(new Runnable() {
+
+			public void run() {
+
+
+				Display disp=parentAct.getWindow().getWindowManager().getDefaultDisplay();
+				GLView.rl = new RelativeLayout(parentAct);
+		        GLView.tv = new TextView(parentAct);
+		        GLView.tv.setTextSize(disp.getWidth()*disp.getHeight()/40000);
+		        GLView.tv.setText("Move the ruler to mesure");
+		        GLView.params = new RelativeLayout.LayoutParams(((Circle2dActivity)parentAct).w,((Circle2dActivity)parentAct).h);
+		        GLView.rl.addView(GLView.tv, GLView.params);
+
+
+		        TextView tv2=new TextView(parentAct);
+		        tv2.setTextSize(disp.getWidth()*disp.getHeight()/40000);
+		        tv2.setText("Drag up");
+		        RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(((Circle2dActivity)parentAct).w,((Circle2dActivity)parentAct).h);
+		        GLView.rl.addView(tv2,params2);
+		        params2.setMargins((int)(disp.getWidth()*0.47), (int)(disp.getHeight()*0.95), 0, 0);
+
+
+
+		        parentAct.addContentView(GLView.rl,  new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+
+
+
+			}
+		});
+
+
+
+
 		screenSize=(float)Math.sqrt(Math.pow(getHeight(), 2)+Math.pow(getWidth(), 2));
 
 		gl.glClearColor(1, 1, 1, 0);
@@ -141,7 +192,13 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		pView=new line(p1c.x, p1c.y, p2c.x,p2c.y);
 		c=new circle(p1c.x, p1c.y, screenSize/100000, (short)19);
 
-		menuKey=new circle(0, 0, 0.3f, (short)6);
+		menuKey=new utils.Button(0, 0, 0.3f, new onClick() {
+
+			public void clicked() {
+				System.exit(0);
+
+			}
+		});
 
 //		RelativeLayout rl = new RelativeLayout(parentAct);
 //        TextView tv = new TextView(parentAct);
@@ -164,6 +221,10 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 	}
 	public boolean onTouch(View v, MotionEvent event) {
+
+		float glEventcX=((event.getX()/(float)getWidth())*(2*((float)getWidth()/getHeight())))-((float)getWidth()/getHeight());
+		float glEventcY=event.getY()/getHeight()*-2+1;
+
 
 		if(event.getAction()==event.ACTION_MOVE){
 
@@ -195,8 +256,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			float glEventcX=((event.getX()/(float)getWidth())*(2*((float)getWidth()/getHeight())))-((float)getWidth()/getHeight());
-			float glEventcY=event.getY()/getHeight()*-2+1;
+
 
 //			double distance1=Math.sqrt(Math.pow(p1c.x-glEventcX, 2)+Math.pow(p1c.y-glEventcY, 2));
 //			double distance2=Math.sqrt(Math.pow(p2c.x-glEventcX, 2)+Math.pow(p2c.y-glEventcY, 2));
@@ -257,13 +317,16 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		}
 
 		if(event.getAction()==event.ACTION_DOWN){
+
+			menuKey.click(glEventcX,glEventcY);
+
 			firstX=event.getX();
 			firstY=event.getY();
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-			float glEventcX=((event.getX()/(float)getWidth())*(2*((float)getWidth()/getHeight())))-((float)getWidth()/getHeight());
-			float glEventcY=event.getY()/getHeight()*-2+1;
+//			float glEventcX=((event.getX()/(float)getWidth())*(2*((float)getWidth()/getHeight())))-((float)getWidth()/getHeight());
+//			float glEventcY=event.getY()/getHeight()*-2+1;
 
 			double distance1=Math.sqrt(Math.pow(p1c.x-glEventcX, 2)+Math.pow(p1c.y-glEventcY, 2));
 			double distance2=Math.sqrt(Math.pow(p2c.x-glEventcX, 2)+Math.pow(p2c.y-glEventcY, 2));
