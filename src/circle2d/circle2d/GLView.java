@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Vector;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -31,6 +32,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.os.PowerManager;
+import android.provider.Settings.System;
 import android.util.Log;
 import utils.*;
 
@@ -57,7 +59,8 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
     float screenSize;
     float lit;
     float litInc=0.01f;
-    utils.Button menuKey;
+    Vector<utils.Button> menuKeys=new Vector<utils.Button>();
+
 
 
 	public GLView(Context context) {
@@ -114,7 +117,9 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		c.draw(gl);
 //		c2.draw(gl);
 
-		menuKey.draw(gl);
+		for(utils.Button btn: menuKeys){
+			btn.draw(gl);
+		}
 
 
 
@@ -125,7 +130,6 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 	}
 	public void onSurfaceChanged(GL10 gl, int arg1, int arg2) {
 
-//		GLU.gluOrtho2D(gl,-(float)getWidth()/getHeight(),(float)getWidth()/getHeight(), -1, +1);
 
 
 	}
@@ -175,8 +179,6 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		gl.glClearColor(1, 1, 1, 0);
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT);
 		homeBtnC=0.4f;
-//		a=new circle(0, -1, homeBtnC, (short)128);
-//		aaaaa=new line(-1, -1, 0, 1, 1, 0);
 
 		c2=new circle(0,0,0,(short)0);
 		gl.glEnableClientState(gl.GL_VERTEX_ARRAY);
@@ -192,29 +194,86 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		pView=new line(p1c.x, p1c.y, p2c.x,p2c.y);
 		c=new circle(p1c.x, p1c.y, screenSize/100000, (short)19);
 
-		menuKey=new utils.Button(0, 0, 0.3f, new onClick() {
 
-			public void clicked() {
-				System.exit(0);
+
+
+
+
+
+
+		final float x=-((float)getWidth()/getHeight())*0.8f,y=+0.7f,c=0.1f;
+		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+
+
+			public void clicked(utils.Button btn) {
+
+				if(btn.clicked==false)
+
+				new Thread(new Runnable() {
+
+					public void run() {
+
+
+						for(int i=0;i<screenSize*menuKeys.get(1).r/4.2;i++){
+							try {
+								Thread.sleep(1);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							for(int j=1;j<=menuKeys.size()-1;j++){
+								menuKeys.get(j).setLoc(x+(float)Math.sin((j/3d)*Math.PI)*i/200,
+													y+(float) Math.cos((j/3d)*Math.PI)*i/200);
+
+							}
+							java.lang.System.out.println();
+
+
+						}
+					}
+				}).start();
+
 
 			}
-		});
+		}));
+		menuKeys.add(new utils.Button(x, y, c, new onClick() {
 
-//		RelativeLayout rl = new RelativeLayout(parentAct);
-//        TextView tv = new TextView(parentAct);
-//        tv.setBackgroundColor(Color.YELLOW);
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(((Circle2dActivity)parentAct).w,((Circle2dActivity)parentAct).h);
-//
-//
-//
-//        rl.addView(tv, params);
-//
-//
-//        params.setMargins(100, 100, 100, 200);
-//
-//
-//
-//        parentAct.addContentView(rl,  new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+			public void clicked(utils.Button btn) {
+
+			}
+		}));
+		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+
+			public void clicked(utils.Button btn) {
+
+			}
+		}));
+		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+
+			public void clicked(utils.Button btn) {
+
+			}
+		}));
+		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+
+			public void clicked(utils.Button btn) {
+
+			}
+		}));
+		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+
+			public void clicked(utils.Button btn) {
+
+			}
+		}));
+		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+
+			public void clicked(utils.Button btn) {
+
+			}
+		}));
+
+
 
 
 
@@ -227,9 +286,6 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 		if(event.getAction()==event.ACTION_MOVE){
-
-
-
 
 
 			if(homeBtn){
@@ -254,21 +310,6 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 			}
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-//			double distance1=Math.sqrt(Math.pow(p1c.x-glEventcX, 2)+Math.pow(p1c.y-glEventcY, 2));
-//			double distance2=Math.sqrt(Math.pow(p2c.x-glEventcX, 2)+Math.pow(p2c.y-glEventcY, 2));
-
-//			if(p2){
-//				p2c.x=glEventcX;
-//				p2c.y=glEventcY;
-//				pView=new line(p2c.x, p2c.y, 0,p1c.x,p1c.y,0);
-//
-//			}
-
-
 			float x=glEventcX-p2c.x;
 			float y=glEventcY-p2c.y;
 
@@ -285,55 +326,35 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 					{
 					p1c.x=glEventcX;
 					p1c.y=glEventcY;
-
-
-
-
 				}
 				pView=new line(p2c.x, p2c.y,p1c.x,p1c.y);
-
-
-
-
-
-
-
-
-
-
-
-
-//				p1c.x=glEventcX;
-//				p1c.y=glEventcY;
-//				pView=new line(p2c.x, p2c.y, 0,p1c.x,p1c.y,0);
-
-
 			}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 			firstX=event.getX();
 			firstY=event.getY();
 		}
 
+
+
+
+
 		if(event.getAction()==event.ACTION_DOWN){
 
-			menuKey.click(glEventcX,glEventcY);
 
+
+			for(utils.Button key:menuKeys){
+				key.click(glEventcX, glEventcY);
+
+			}
 			firstX=event.getX();
 			firstY=event.getY();
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-//			float glEventcX=((event.getX()/(float)getWidth())*(2*((float)getWidth()/getHeight())))-((float)getWidth()/getHeight());
-//			float glEventcY=event.getY()/getHeight()*-2+1;
 
 			double distance1=Math.sqrt(Math.pow(p1c.x-glEventcX, 2)+Math.pow(p1c.y-glEventcY, 2));
 			double distance2=Math.sqrt(Math.pow(p2c.x-glEventcX, 2)+Math.pow(p2c.y-glEventcY, 2));
 
 			p1=(distance1>0.05)?false:true;
 			p2=(distance2>0.05)?false:true;
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			distanceFromKey=(float)Math.sqrt(
 					Math.pow(this.getWidth()/2-event.getX(),2)+
@@ -351,17 +372,17 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		}
 
 
+
+
+
+
+
 		if(event.getAction()==event.ACTION_UP){
-
-
 			homeBtn=false;
-
-
 		}
 
 
 		c.setLoc(p1c.x, p1c.y);
-//		c2=new circle(p2c.x, p2c.y, screenSize/100000, (short)19);
 		parentAct.runOnUiThread(new Runnable() {
 
 			public void run() {

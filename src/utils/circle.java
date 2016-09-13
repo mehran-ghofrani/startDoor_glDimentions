@@ -11,9 +11,9 @@ public class circle {
 
 	FloatBuffer vertexBuffer;
 	ShortBuffer indexBuffer;
-	float x;
-	float y;
-	float r;
+	public float x;
+	public float y;
+	public float r;
 
 
 

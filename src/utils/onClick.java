@@ -1,5 +1,5 @@
 package utils;
 
 public interface onClick {
-	void clicked();
+	public void clicked(Button btn);
 }
