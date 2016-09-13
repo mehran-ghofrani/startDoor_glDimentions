@@ -7,6 +7,8 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.Activity;
+
 public class circle {
 
 	FloatBuffer vertexBuffer;
@@ -14,6 +16,7 @@ public class circle {
 	public float x;
 	public float y;
 	public float r;
+	public static Activity parentActivity;
 
 
 

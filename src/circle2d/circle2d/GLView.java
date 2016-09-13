@@ -28,6 +28,7 @@ import android.widget.RemoteViews.ActionException;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
@@ -68,6 +69,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		super(context);
 
 		parentAct=(Activity)context;
+		utils.Button.parentActivity=parentAct;
 		setRenderer(this);
 		setOnTouchListener(this);
 
@@ -160,7 +162,8 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		        tv2.setText("Drag up");
 		        RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(((Circle2dActivity)parentAct).w,((Circle2dActivity)parentAct).h);
 		        GLView.rl.addView(tv2,params2);
-		        params2.setMargins((int)(disp.getWidth()*0.47), (int)(disp.getHeight()*0.95), 0, 0);
+		        float width=tv2.getPaint().measureText("Drag up");
+		        params2.setMargins((int)((disp.getWidth()-width)/2), (int)(disp.getHeight()*0.95), 0, 0);
 
 
 
@@ -201,72 +204,90 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 
-		final float x=-((float)getWidth()/getHeight())*0.8f,y=+0.7f,c=0.1f;
-		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+		final float x=-((float)getWidth()/getHeight())*0.7f,
+					y=1-((float)getWidth()/getHeight())*0.3f,
+					c=((float)getWidth()/getHeight())*0.1f;
+		menuKeys.add(new utils.Button(x, y, c,"+", new onClick() {
 
 
 			public void clicked(utils.Button btn) {
 
-				if(btn.clicked==false)
-
-				new Thread(new Runnable() {
-
-					public void run() {
+				if(btn.clicked==false){
+					for(int j=1;j<=menuKeys.size()-1;j++){
+						menuKeys.get(j).visible=true;
 
 
-						for(int i=0;i<screenSize*menuKeys.get(1).r/4.2;i++){
-							try {
-								Thread.sleep(1);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							for(int j=1;j<=menuKeys.size()-1;j++){
-								menuKeys.get(j).setLoc(x+(float)Math.sin((j/3d)*Math.PI)*i/200,
-													y+(float) Math.cos((j/3d)*Math.PI)*i/200);
-
-							}
-							java.lang.System.out.println();
-
-
-						}
 					}
-				}).start();
+
+					new Thread(new Runnable() {
+
+						public void run() {
+
+
+							for(int i=0;i<screenSize*menuKeys.get(1).r/4.2;i++){
+								try {
+									Thread.sleep(4);
+								} catch (InterruptedException e) {
+
+									e.printStackTrace();
+								}
+								for(int j=1;j<=menuKeys.size()-1;j++){
+									menuKeys.get(j).setLoc(x+(float)Math.sin((j/3d)*Math.PI)*i/200,
+											y+(float) Math.cos((j/3d)*Math.PI)*i/200);
+
+								}
+								java.lang.System.out.println();
+
+
+							}
+						}
+					}).start();
+				}
+				else{
+
+					for(int j=1;j<=menuKeys.size()-1;j++){
+						menuKeys.get(j).visible=false;
+
+
+					}
+
+				}
+
 
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+		menuKeys.add(new utils.Button(x, y, c,"?", new onClick() {
 
 			public void clicked(utils.Button btn) {
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+		menuKeys.add(new utils.Button(x, y, c,"?",  new onClick() {
 
 			public void clicked(utils.Button btn) {
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+		menuKeys.add(new utils.Button(x, y, c, "Film", new onClick() {
 
 			public void clicked(utils.Button btn) {
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+		menuKeys.add(new utils.Button(x, y, c, "Photo", new onClick() {
 
 			public void clicked(utils.Button btn) {
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+		menuKeys.add(new utils.Button(x, y, c, "Movie", new onClick() {
 
 			public void clicked(utils.Button btn) {
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, new onClick() {
+		menuKeys.add(new utils.Button(x, y, c, "Game", new onClick() {
 
 			public void clicked(utils.Button btn) {
 
