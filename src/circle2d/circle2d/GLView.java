@@ -40,6 +40,7 @@ import utils.*;
 
 public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
+	public static boolean moving=false;
 	public static TextView tv;
 	public static RelativeLayout.LayoutParams params;
 	public static RelativeLayout rl;
@@ -119,9 +120,12 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		c.draw(gl);
 //		c2.draw(gl);
 
+//		gl.glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
 		for(utils.Button btn: menuKeys){
 			btn.draw(gl);
 		}
+//		gl.glColor4f(0, 0, 0, 0);
+
 
 
 
@@ -179,8 +183,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 		screenSize=(float)Math.sqrt(Math.pow(getHeight(), 2)+Math.pow(getWidth(), 2));
 
-		gl.glClearColor(1, 1, 1, 0);
-		gl.glClear(gl.GL_COLOR_BUFFER_BIT);
+
 		homeBtnC=0.4f;
 
 		c2=new circle(0,0,0,(short)0);
@@ -212,46 +215,51 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 			public void clicked(utils.Button btn) {
 
-				if(btn.clicked==false){
-					for(int j=1;j<=menuKeys.size()-1;j++){
-						menuKeys.get(j).visible=true;
 
 
-					}
 
-					new Thread(new Runnable() {
-
-						public void run() {
+					if(btn.clicked==false){
 
 
-							for(int i=0;i<screenSize*menuKeys.get(1).r/4.2;i++){
-								try {
-									Thread.sleep(4);
-								} catch (InterruptedException e) {
+						new Thread(new Runnable() {
 
-									e.printStackTrace();
+							public void run() {
+								GLView.moving=true;
+
+
+								for(int i=0;i<screenSize*menuKeys.get(1).r/4.2;i++){
+									try {
+										Thread.sleep(4);
+									} catch (InterruptedException e) {
+
+										e.printStackTrace();
+									}
+									for(int j=1;j<=menuKeys.size()-1;j++){
+										menuKeys.get(j).setLoc(x+(float)Math.sin((j/3d)*Math.PI)*i/200,
+												y+(float) Math.cos((j/3d)*Math.PI)*i/200);
+
+									}
+									java.lang.System.out.println();
+
+
 								}
-								for(int j=1;j<=menuKeys.size()-1;j++){
-									menuKeys.get(j).setLoc(x+(float)Math.sin((j/3d)*Math.PI)*i/200,
-											y+(float) Math.cos((j/3d)*Math.PI)*i/200);
-
-								}
-								java.lang.System.out.println();
-
-
+								GLView.moving=false;
 							}
+						}).start();
+						for(int j=1;j<=menuKeys.size()-1;j++){
+							menuKeys.get(j).visible=true;
 						}
-					}).start();
-				}
-				else{
+					}
+					else{
 
-					for(int j=1;j<=menuKeys.size()-1;j++){
-						menuKeys.get(j).visible=false;
+						for(int j=1;j<=menuKeys.size()-1;j++){
+							menuKeys.get(j).visible=false;
 
+
+						}
 
 					}
 
-				}
 
 
 
@@ -413,10 +421,11 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 				tv.setText(String.format( "%.2f", a )+" cm");
 
-				params.setMargins((int)(getWidth()*(  ((p1c.x/((float)getWidth()/getHeight())+1)/2)  )), (int)(getHeight()*(p1c.y-1)/-2), 0, 0);
+				GLView.params.setMargins((int)(getWidth()*(  ((p1c.x/((float)getWidth()/getHeight())+1)/2)  )), (int)(getHeight()*(p1c.y-1)/-2), 0, 0);
 
 				GLView.rl.removeView(GLView.tv);
 				GLView.rl.addView(GLView.tv, GLView.params);
+
 			}
 		});
 		return true;

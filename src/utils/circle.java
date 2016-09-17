@@ -17,6 +17,8 @@ public class circle {
 	public float y;
 	public float r;
 	public static Activity parentActivity;
+	public static float colorR,colorG,colorB;
+
 
 
 
@@ -68,6 +70,12 @@ public class circle {
 		indexBuffer.position(0);
 	}
 
+	public void setCol(float r,float g,float b){
+		this.colorR=r;
+		this.colorG=g;
+		this.colorB=b;
+
+	}
 	public void setLoc(float x,float y){
 		this.x=x;
 		this.y=y;
@@ -76,6 +84,7 @@ public class circle {
 		this.r=r;
 	}
 	public void draw(GL10 gl) {
+
 
 
 		gl.glLoadIdentity();
