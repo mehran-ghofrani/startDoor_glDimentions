@@ -40,6 +40,7 @@ import utils.*;
 
 public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
+	public static boolean ruler=false;
 	public static boolean moving=false;
 	public static TextView tv;
 	public static RelativeLayout.LayoutParams params;
@@ -116,8 +117,11 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		a.draw(gl);
 		gl.glColor4f(0, 0, 0, 0);
 
-		pView.draw(gl);
-		c.draw(gl);
+
+		if(ruler){
+			c.draw(gl);
+			pView.draw(gl);
+		}
 //		c2.draw(gl);
 
 //		gl.glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
@@ -157,8 +161,10 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		        GLView.tv = new TextView(parentAct);
 		        GLView.tv.setTextSize(disp.getWidth()*disp.getHeight()/40000);
 		        GLView.tv.setText("Move the ruler to mesure");
+		        GLView.tv.setVisibility(View.GONE);
 		        GLView.params = new RelativeLayout.LayoutParams(((Circle2dActivity)parentAct).w,((Circle2dActivity)parentAct).h);
 		        GLView.rl.addView(GLView.tv, GLView.params);
+
 
 
 		        TextView tv2=new TextView(parentAct);
@@ -213,12 +219,19 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		menuKeys.add(new utils.Button(x, y, c,"+", new onClick() {
 
 
-			public void clicked(utils.Button btn) {
+			public void clicked(final utils.Button btn) {
 
 
+
+				parentAct.runOnUiThread(new Runnable() {
+					public void run() {
+						if(!moving)btn.tv.setText(btn.clicked?"+":"x");
+					}
+				});
 
 
 					if(btn.clicked==false){
+
 
 
 						new Thread(new Runnable() {
@@ -228,6 +241,23 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 								for(int i=0;i<screenSize*menuKeys.get(1).r/4.2;i++){
+									if(i==1)
+										for(int j=1;j<=menuKeys.size()-1;j++){
+											menuKeys.get(j).visible=true;
+
+											final int jj=j;
+											parentAct.runOnUiThread(new Runnable() {
+												public void run() {
+
+
+													menuKeys.get(jj).tv.setVisibility(View.VISIBLE);
+
+
+												}
+											});
+
+										}
+
 									try {
 										Thread.sleep(4);
 									} catch (InterruptedException e) {
@@ -246,15 +276,22 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 								GLView.moving=false;
 							}
 						}).start();
-						for(int j=1;j<=menuKeys.size()-1;j++){
-							menuKeys.get(j).visible=true;
-						}
+
 					}
 					else{
 
 						for(int j=1;j<=menuKeys.size()-1;j++){
 							menuKeys.get(j).visible=false;
+							final int jj=j;
+							parentAct.runOnUiThread(new Runnable() {
+								public void run() {
 
+
+									menuKeys.get(jj).tv.setVisibility(View.GONE);
+
+
+								}
+							});
 
 						}
 
@@ -265,21 +302,39 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 			}
 		}));
+		parentAct.runOnUiThread(new Runnable() {
+			public void run() {
+
+				menuKeys.get(0).tv.setVisibility(View.VISIBLE);
+
+			}
+		});
+
 		menuKeys.add(new utils.Button(x, y, c,"?", new onClick() {
 
 			public void clicked(utils.Button btn) {
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c,"?",  new onClick() {
+		menuKeys.add(new utils.Button(x, y, c,"Ruler",  new onClick() {
 
 			public void clicked(utils.Button btn) {
+				parentAct.runOnUiThread(new Runnable() {
+					public void run() {
+
+						GLView.tv.setVisibility(GLView.tv.getVisibility()==View.GONE?View.VISIBLE:View.GONE);
+
+					}
+				});
+
+				GLView.ruler=!GLView.ruler;
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, "Film", new onClick() {
+		menuKeys.add(new utils.Button(x, y, c, "Home", new onClick() {
 
 			public void clicked(utils.Button btn) {
+				parentAct.setContentView(new DrawView(parentAct));
 
 			}
 		}));

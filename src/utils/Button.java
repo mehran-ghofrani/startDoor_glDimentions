@@ -35,16 +35,18 @@ public class Button extends circle {
 
 				Display disp=parentActivity.getWindow().getWindowManager().getDefaultDisplay();
 		        tv = new TextView(parentActivity);
-		        tv.setTextSize(disp.getWidth()*disp.getHeight()/40000);
+		        tv.setTextSize(disp.getWidth()/40);
 		        tv.setText(text);
-		        float textWidth=tv.getPaint().measureText("Drag up");
+		        float textWidth=tv.getPaint().measureText(text);
+		        float textHeight=tv.getPaint().measureText("o")*2;
 		        float w=((Circle2dActivity)parentActivity).w;
 		        float h=((Circle2dActivity)parentActivity).h;
 		        float glw=((Button.this.x+(float)w/h)/((float)w*2/h))*w;
 		        float glh=((Button.this.y-1)/-2)*h;
 		        params = new RelativeLayout.LayoutParams((int)w,(int)h);
-		        params.setMargins((int)glw, (int)glh, 0, 0);
+		        params.setMargins((int)(glw-textWidth/2), (int)(glh-textHeight/2), 0, 0);
 		        GLView.rl.addView(tv, params);
+		        tv.setVisibility(View.GONE);
 
 
 
@@ -67,7 +69,7 @@ public class Button extends circle {
 			clicked=!clicked;
 			listener.clicked(this);
 
-		    tv.setVisibility(clicked?View.VISIBLE:View.GONE);
+		    
 
 
 			}
@@ -84,6 +86,9 @@ public class Button extends circle {
 
 					Button.this.x-=(Button.this.x-x)/3000000;
 					Button.this.y-=(Button.this.y-y)/3000000;
+
+
+
 
 
 				}
@@ -106,4 +111,32 @@ public class Button extends circle {
 		if(visible==true)
 			super.draw(gl);
 	}
+	public void setLoc(float x,float y){
+
+		super.setLoc(x, y);
+
+		
+		
+		parentActivity.runOnUiThread(new Runnable() {
+
+			public void run() {
+
+				float textWidth=tv.getPaint().measureText((String) Button.this.tv.getText());
+				float textHeight=tv.getPaint().measureText("o")*2;
+				float w=((Circle2dActivity)parentActivity).w;
+				float h=((Circle2dActivity)parentActivity).h;
+				float glw=((Button.this.x+(float)w/h)/((float)w*2/h))*w;
+				float glh=((Button.this.y-1)/-2)*h;
+				params.setMargins((int)(glw-textWidth/2), (int)(glh-textHeight/2), 0, 0);
+				GLView.rl.removeView(Button.this.tv);
+				GLView.rl.addView(tv, params);
+
+
+
+			}
+		});
+		
+		
+	}
+
 }
