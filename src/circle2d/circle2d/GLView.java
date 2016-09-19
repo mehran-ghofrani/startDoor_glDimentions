@@ -229,6 +229,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 					}
 				});
 
+				
 
 					if(btn.clicked==false){
 

@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 public class Circle2dActivity extends Activity {
 
+
+
 	static DrawView drawView;
 	static DrawView drawView2;
 	public static int h,w;
@@ -27,16 +29,21 @@ public class Circle2dActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        
+        h=getWindowManager().getDefaultDisplay().getHeight();
+        w=getWindowManager().getDefaultDisplay().getWidth();
 
 
-        setContentView(new DrawView(this));
+//        setContentView(new DrawView(this));
+
+        setContentView(new ImagePane(this));
+
 //        drawView.requestFocus();
 //        setContentView(new GLView(this));
 
 
 
-        h=getWindowManager().getDefaultDisplay().getHeight();
-        w=getWindowManager().getDefaultDisplay().getWidth();
+
 
 
 
