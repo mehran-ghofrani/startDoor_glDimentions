@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -37,6 +38,8 @@ public class ImagePane extends RelativeLayout {
 		height=((Circle2dActivity)parentContext).h;
 		initialize();
 	}
+
+
 	private void initialize(){
 		imgs.add(new ImageItem(parentContext,R.drawable.samsunet_1));
 		imgs.add(new ImageItem(parentContext,R.drawable.samsunet_2));
@@ -48,7 +51,7 @@ public class ImagePane extends RelativeLayout {
 			RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 			params.setMargins(i*width, 0, -i*width, 0);
 			addView(imgItm,params);
-//			imgItm.setBackgroundColor(Color.rgb(i*44, i+1*44, i*44));
+			imgItm.setBackgroundColor(Color.rgb(i*44, i+1*44, i*44));
 			i++;
 
 		}
@@ -70,43 +73,48 @@ public class ImagePane extends RelativeLayout {
 			currentLocation[i]=width*(i-currentPic);
 		}
 		final int stepsNum=right?100:-100;
-		final int stepsLenght=width/stepsNum;
-		new Thread(new Runnable() {
+		final double stepsLenght=(double)width/stepsNum;
+		if (1<=currentPic&&right||!right&&currentPic<=imgs.size()-2)
+			new Thread(new Runnable() {
 
-			public void run() {
+				public void run() {
 
-				for(int j=0;j<=Math.abs(stepsNum);j++){
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					for(int j=1;j<=Math.abs(stepsNum);j++){
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+
+						for(int i=0;i<=imgs.size()-1;i++){
+							final int ii=i;
+							final RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+							params.setMargins((i-currentPic)*width+(int)(stepsLenght*j), 0, -((i-currentPic)*width+(int)(stepsLenght*j)), 0);
+
+							((Activity)parentContext).runOnUiThread(new Runnable() {
+								public void run() {
+
+									imgs.get(ii).setLayoutParams(params);
+
+
+								}
+							});
+
+						}
 					}
 
-					for(int i=0;i<=imgs.size()-1;i++){
-						final int ii=i;
-						final RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
-						params.setMargins((i-currentPic)*width+stepsLenght*j, 0, -((i-currentPic)*width+stepsLenght*j), 0);
-
-						((Activity)parentContext).runOnUiThread(new Runnable() {
-							public void run() {
-
-								imgs.get(ii).setLayoutParams(params);
 
 
-							}
-						});
 
-					}
+
+
+					currentPic+=right?-1:+1;
+
+
+
 				}
+			}).start();
 
-
-
-
-
-
-				currentPic+=right?1:-1;
-			}
-		}).start();
 
 
 
