@@ -26,6 +26,7 @@ public class ImagePane extends RelativeLayout {
 	Context parentContext;
 	int height;
 	int width;
+	static boolean moving=false;
 
 
 	ImagePane(Context context){
@@ -51,7 +52,7 @@ public class ImagePane extends RelativeLayout {
 			RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 			params.setMargins(i*width, 0, -i*width, 0);
 			addView(imgItm,params);
-			imgItm.setBackgroundColor(Color.rgb(i*44, i+1*44, i*44));
+			imgItm.setBackgroundColor(Color.WHITE);
 			i++;
 
 		}
@@ -74,11 +75,13 @@ public class ImagePane extends RelativeLayout {
 		}
 		final int stepsNum=right?100:-100;
 		final double stepsLenght=(double)width/stepsNum;
-		if (1<=currentPic&&right||!right&&currentPic<=imgs.size()-2)
+		if ((1<=currentPic&&right||!right&&currentPic<=imgs.size()-2)&&!moving)
 			new Thread(new Runnable() {
 
-				public void run() {
 
+
+				public void run() {
+					ImagePane.moving=true;
 					for(int j=1;j<=Math.abs(stepsNum);j++){
 						try {
 							Thread.sleep(10);
@@ -109,6 +112,7 @@ public class ImagePane extends RelativeLayout {
 
 
 					currentPic+=right?-1:+1;
+					ImagePane.moving=false;
 
 
 

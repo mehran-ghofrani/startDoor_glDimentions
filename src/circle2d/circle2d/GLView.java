@@ -8,7 +8,10 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.Vector;
 
+import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
 import org.w3c.dom.Text;
@@ -29,6 +32,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
@@ -40,6 +44,9 @@ import utils.*;
 
 public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
+
+
+	public static boolean blackBakcGround;
 	public static boolean ruler=false;
 	public static boolean moving=false;
 	public static TextView tv;
@@ -70,9 +77,28 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 		super(context);
 
+
 		parentAct=(Activity)context;
 		utils.Button.parentActivity=parentAct;
+
+
+		getHolder().setFormat(PixelFormat.RGBA_8888 );
+		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+		setZOrderOnTop(true);
+
+
+
+
+
+
+
+
 		setRenderer(this);
+
+
+
+
+
 		setOnTouchListener(this);
 
 		p2c.x=(21/2)*cmToGL;
@@ -92,9 +118,13 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 
+
+
+
+
 	public void onDrawFrame(GL10 gl) {
 
-		gl.glClearColor(1-(homeBtnC/1.5f-1/5f), 1-(homeBtnC/1.5f-1/5f), 1-(homeBtnC/1.5f-1/5f),1-(homeBtnC/1.5f-1/5f));
+		gl.glClearColor(0,0,0,(homeBtnC/1.5f-1/5f));
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT);
 
 
@@ -115,7 +145,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 		a.draw(gl);
-		gl.glColor4f(0, 0, 0, 0);
+		gl.glColor4f(0.01f, 0.01f, 0.01f, 0.5f);
 
 
 		if(ruler){
@@ -144,6 +174,17 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 	}
 	public void onSurfaceCreated(GL10 gl, EGLConfig arg1) {
+
+
+
+		gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glEnable( gl.GL_BLEND );
+		gl.glClearColor(0, 0, 0, 0);
+
+
+
+
+
 
 
 
@@ -187,6 +228,10 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 
+
+
+
+
 		screenSize=(float)Math.sqrt(Math.pow(getHeight(), 2)+Math.pow(getWidth(), 2));
 
 
@@ -198,7 +243,6 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		GLU.gluOrtho2D(gl,-(float)getWidth()/getHeight(),(float)getWidth()/getHeight(), -1, +1);
 		gl.glMatrixMode(gl.GL_MODELVIEW);
 		gl.glColor4f(0, 0, 0, 0);
-		gl.glClearColor(1, 1, 1, 0);
 		p1c.x=p2c.x;
 		p1c.y=p1c.y-screenSize/10000;
 		a=new circle(0, -1, homeBtnC, (short)4);
@@ -229,7 +273,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 					}
 				});
 
-				
+
 
 					if(btn.clicked==false){
 
@@ -342,6 +386,8 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		menuKeys.add(new utils.Button(x, y, c, "Photo", new onClick() {
 
 			public void clicked(utils.Button btn) {
+				parentAct.setContentView(new ImagePane(parentAct));
+				parentAct.addContentView(new GLView(parentAct), params);
 
 			}
 		}));
@@ -479,8 +525,9 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 				GLView.params.setMargins((int)(getWidth()*(  ((p1c.x/((float)getWidth()/getHeight())+1)/2)  )), (int)(getHeight()*(p1c.y-1)/-2), 0, 0);
 
-				GLView.rl.removeView(GLView.tv);
-				GLView.rl.addView(GLView.tv, GLView.params);
+//				GLView.rl.removeView(GLView.tv);
+//				GLView.rl.addView(GLView.tv, GLView.params);
+				GLView.tv.setLayoutParams(GLView.params);
 
 			}
 		});

@@ -34,9 +34,9 @@ public class Circle2dActivity extends Activity {
         w=getWindowManager().getDefaultDisplay().getWidth();
 
 
-//        setContentView(new DrawView(this));
+        setContentView(new DrawView(this));
 
-        setContentView(new ImagePane(this));
+//        setContentView(new ImagePane(this));
 
 //        drawView.requestFocus();
 //        setContentView(new GLView(this));
