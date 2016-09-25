@@ -64,7 +64,15 @@ public class DrawView extends View implements OnTouchListener {
     		end=true;
 
 
-	    	parentActivity.setContentView(new GLView(parentActivity));
+
+    		Circle2dActivity act=(Circle2dActivity)parentActivity;
+    		act.setContentView(act.currentPage=new ImagePane(act));
+    		act.addContentView(new GLView(act), new LayoutParams(act.w,act.h));
+
+
+
+//    		parentActivity.setContentView(new GLView(new whiteView));
+//	    	parentActivity.addContentView(new GLView(parentActivity), params);
 
 
 //

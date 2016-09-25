@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.AbsoluteLayout;
@@ -19,8 +20,7 @@ public class Circle2dActivity extends Activity {
 
 
 
-	static DrawView drawView;
-	static DrawView drawView2;
+	public static View currentPage;
 	public static int h,w;
     /** Called when the activity is first created. */
     @Override
@@ -34,7 +34,8 @@ public class Circle2dActivity extends Activity {
         w=getWindowManager().getDefaultDisplay().getWidth();
 
 
-        setContentView(new DrawView(this));
+
+        setContentView(currentPage=new DrawView(this));
 
 //        setContentView(new ImagePane(this));
 

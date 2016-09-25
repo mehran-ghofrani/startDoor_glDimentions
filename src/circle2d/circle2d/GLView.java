@@ -62,7 +62,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
     public boolean p1=false,p2=false;
     public line pView;
     public Point p1c=new Point(),p2c=new Point();
-    public Activity parentAct;
+    public Circle2dActivity parentAct;
     public line aaaaa;
     public circle a;
     float distanceFromKey;
@@ -78,7 +78,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		super(context);
 
 
-		parentAct=(Activity)context;
+		parentAct=(Circle2dActivity)context;
 		utils.Button.parentActivity=parentAct;
 
 
@@ -411,6 +411,12 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 	}
 	public boolean onTouch(View v, MotionEvent event) {
+
+
+		super.onTouchEvent(event);
+		parentAct.currentPage.onTouchEvent(event);
+		((DrawView)parentAct.currentPage).onTouch((DrawView)parentAct.currentPage, event);
+
 
 		float glEventcX=((event.getX()/(float)getWidth())*(2*((float)getWidth()/getHeight())))-((float)getWidth()/getHeight());
 		float glEventcY=event.getY()/getHeight()*-2+1;
