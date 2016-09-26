@@ -77,13 +77,15 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 		super(context);
 
+		ruler=false;
+
 
 		parentAct=(Circle2dActivity)context;
 		utils.Button.parentActivity=parentAct;
 
 
 		getHolder().setFormat(PixelFormat.RGBA_8888 );
-		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+//		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 		setZOrderOnTop(true);
 
 
@@ -128,6 +130,9 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT);
 
 
+
+
+
 		if(!homeBtn&&homeBtnC>0.2){
 			if(lit>1)
 				litInc=-0.01f;
@@ -135,23 +140,25 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 				litInc=0.01f;
 			lit+=litInc;
 
-			gl.glColor4f(lit, lit, lit, 0);
+			gl.glColor4f(lit, lit, lit,0.5f);
 			homeBtnC-=(homeBtnC-0.2)/10;///////executes forever
 			a.setRad(homeBtnC);
 
 		}
-
-
-
-
 		a.draw(gl);
-		gl.glColor4f(0.01f, 0.01f, 0.01f, 0.5f);
-
 
 		if(ruler){
+			gl.glColor4f(0.5f, 0.5f, 0.5f,1);
+
 			c.draw(gl);
 			pView.draw(gl);
 		}
+
+		float btnsColor=homeBtnC/3.5f;
+		gl.glColor4f(0.4f-btnsColor, 0.4f-btnsColor, 0.4f-btnsColor, 0.5f+btnsColor);
+
+
+
 //		c2.draw(gl);
 
 //		gl.glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
@@ -413,9 +420,9 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 	public boolean onTouch(View v, MotionEvent event) {
 
 
-		super.onTouchEvent(event);
-		parentAct.currentPage.onTouchEvent(event);
-		((DrawView)parentAct.currentPage).onTouch((DrawView)parentAct.currentPage, event);
+
+		ImageItem imagesTouchResever=((ImagePane)parentAct.currentPage).imgs.get(1);
+		imagesTouchResever.dispatchTouchEvent(event);
 
 
 		float glEventcX=((event.getX()/(float)getWidth())*(2*((float)getWidth()/getHeight())))-((float)getWidth()/getHeight());
