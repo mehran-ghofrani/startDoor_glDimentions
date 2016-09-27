@@ -94,7 +94,6 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 
-
 		setRenderer(this);
 
 
@@ -264,10 +263,13 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 
 
-		final float x=-((float)getWidth()/getHeight())*0.7f,
-					y=1-((float)getWidth()/getHeight())*0.3f,
-					c=((float)getWidth()/getHeight())*0.1f;
-		menuKeys.add(new utils.Button(x, y, c,"+", new onClick() {
+		final boolean landscape=getWidth()>getHeight();
+		final float width=(float)getWidth()/getHeight();
+		final float c=landscape?1f/6:width/6,
+					y=1-c*3,
+					x=-width+c*3;
+
+		menuKeys.add(new utils.Button(x, y, c,"+",1, new onClick() {
 
 
 			public void clicked(final utils.Button btn) {
@@ -276,7 +278,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 				parentAct.runOnUiThread(new Runnable() {
 					public void run() {
-						if(!moving)btn.tv.setText(btn.clicked?"+":"x");
+						if(!moving)btn.tv.setText(btn.clicked?"+":"X");
 					}
 				});
 
@@ -359,16 +361,19 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 				menuKeys.get(0).tv.setVisibility(View.VISIBLE);
 
+
+
+
 			}
 		});
 
-		menuKeys.add(new utils.Button(x, y, c,"?", new onClick() {
+		menuKeys.add(new utils.Button(x, y, c,"?",1, new onClick() {
 
 			public void clicked(utils.Button btn) {
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c,"Ruler",  new onClick() {
+		menuKeys.add(new utils.Button(x, y, c,"Ruler",1,  new onClick() {
 
 			public void clicked(utils.Button btn) {
 				parentAct.runOnUiThread(new Runnable() {
@@ -383,14 +388,14 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, "Home", new onClick() {
+		menuKeys.add(new utils.Button(x, y, c, "Home",1, new onClick() {
 
 			public void clicked(utils.Button btn) {
 				parentAct.setContentView(new DrawView(parentAct));
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, "Photo", new onClick() {
+		menuKeys.add(new utils.Button(x, y, c, "Photo",1, new onClick() {
 
 			public void clicked(utils.Button btn) {
 				parentAct.setContentView(new ImagePane(parentAct));
@@ -398,13 +403,13 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, "Movie", new onClick() {
+		menuKeys.add(new utils.Button(x, y, c, "Movie",1, new onClick() {
 
 			public void clicked(utils.Button btn) {
 
 			}
 		}));
-		menuKeys.add(new utils.Button(x, y, c, "Game", new onClick() {
+		menuKeys.add(new utils.Button(x, y, c, "Game",1, new onClick() {
 
 			public void clicked(utils.Button btn) {
 
