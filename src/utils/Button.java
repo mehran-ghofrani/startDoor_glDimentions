@@ -30,23 +30,33 @@ public class Button extends circle {
 	public RelativeLayout.LayoutParams params;
 	public boolean clicked=false;
 	public boolean visible=true;
-	public Button(float x,float y,float r,final String text,final int textSize,onClick listener){
+	public Button(final float x,final float y,float r,final String text,final int textSize,onClick listener){
 		super(x,y,r,(short)6);
 		this.listener=listener;
+		tv = new TextView(parentActivity);
+
 		parentActivity.runOnUiThread(new Runnable() {
 
 			public void run() {
 
+
+
 				Display disp=parentActivity.getWindow().getWindowManager().getDefaultDisplay();
-		        tv = new TextView(parentActivity);
+
 		        tv.setTextSize(textSize*Math.max(disp.getWidth(),disp.getHeight())/40);
 		        tv.setText(text);
-		        tv.setBackgroundColor(Color.RED);
-		        GLView.rl.addView(tv);
+//		        tv.setBackgroundColor(Color.RED);
 		        params=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		        moveText();
+		        GLView.rl.addView(tv,params);
 
-		        tv.setVisibility(View.GONE);
+
+
+
+
+
+
+
+
 
 
 
@@ -58,6 +68,9 @@ public class Button extends circle {
 
 			}
 		});
+        setVisible(false);
+
+
 
 
 		}
@@ -77,25 +90,25 @@ public class Button extends circle {
 
 
 		}
-	public void move(final double x,final double y){
+	public void move(final float x,final float y){
 
 		new Thread(new Runnable() {
 
 			public void run() {
-				while(Math.abs(Button.this.x-x)>=0.1||Math.abs(Button.this.y-y)>=0.1){
+				for(int i=1;i<=100;i++){
 
-					Button.this.x-=(Button.this.x-x)/3000000;
-					Button.this.y-=(Button.this.y-y)/3000000;
-
-
-
+					try {
+						Thread.sleep(5);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					float xMove=Button.this.x+((x-Button.this.x)/((101-i)*0.5f));
+					float yMove=Button.this.y+((y-Button.this.y)/((101-i)*0.5f));
+					setLoc(xMove, yMove);
 
 
 				}
-
-
-
-
 
 
 			}
@@ -114,20 +127,11 @@ public class Button extends circle {
 	public void setLoc(float x,float y){
 
 		super.setLoc(x, y);
+		moveText();
 
 
 
-		parentActivity.runOnUiThread(new Runnable() {
 
-			public void run() {
-
-//				float textWidth=tv.getPaint().measureText((String) Button.this.tv.getText());
-//				float textHeight=tv.getPaint().measureText("o")*2;
-				moveText();
-
-
-			}
-		});
 
 
 	}
@@ -137,17 +141,38 @@ public class Button extends circle {
 //        tv.getPaint().getTextBounds((String) Button.this.tv.getText(),0, ((String) Button.this.tv.getText()).length(),bounds);
 //        float textWidth=bounds.width();
 //        float textHeight=bounds.height();
-		float w=((Circle2dActivity)parentActivity).w;
-		float h=((Circle2dActivity)parentActivity).h;
-		float glw=((Button.this.x+(float)w/h)/((float)w*2/h))*w;
-		float glh=((Button.this.y-1)/-2)*h;
-        params.setMargins((int)(glw-tv.getWidth()/2), (int)(glh-tv.getHeight()/2),0 ,0);
+		parentActivity.runOnUiThread(new Runnable() {
 
-//        params.setMargins((int)(glw-textWidth/2), (int)(glh-textHeight/2), (int)((w-glw)-textWidth/2), (int)((h-glh)-textHeight/2));
-		tv.setLayoutParams(params);
+			public void run() {
+
+
+				float w=((Circle2dActivity)parentActivity).w;
+				float h=((Circle2dActivity)parentActivity).h;
+				float glw=((Button.this.x+(float)w/h)/((float)w*2/h))*w;
+				float glh=((Button.this.y-1)/-2)*h;
+
+		        params.setMargins((int)(glw-tv.getWidth()/2), (int)(glh-tv.getHeight()/2),0 ,0);
+
+//		        params.setMargins((int)(glw-textWidth/2), (int)(glh-textHeight/2), (int)((w-glw)-textWidth/2), (int)((h-glh)-textHeight/2));
+				tv.setLayoutParams(params);
+
+			}
+		});
+
 
 
 
 	}
 
+	public void setVisible(final boolean visibility){
+		visible=visibility;
+		parentActivity.runOnUiThread(new Runnable() {
+
+			public void run() {
+				tv.setVisibility(visibility?View.VISIBLE:View.INVISIBLE);
+
+			}
+		});
+
+	}
 }

@@ -208,7 +208,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 		        GLView.tv = new TextView(parentAct);
 		        GLView.tv.setTextSize(disp.getWidth()*disp.getHeight()/40000);
 		        GLView.tv.setText("Move the ruler to mesure");
-		        GLView.tv.setVisibility(View.GONE);
+		        GLView.tv.setVisibility(View.INVISIBLE);
 		        GLView.params = new RelativeLayout.LayoutParams(((Circle2dActivity)parentAct).w,((Circle2dActivity)parentAct).h);
 		        GLView.rl.addView(GLView.tv, GLView.params);
 
@@ -269,7 +269,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 					y=1-c*3,
 					x=-width+c*3;
 
-		menuKeys.add(new utils.Button(x, y, c,"+",1, new onClick() {
+		menuKeys.add(new utils.Button(x, y, c,"+",2, new onClick() {
 
 
 			public void clicked(final utils.Button btn) {
@@ -297,33 +297,50 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 								for(int i=0;i<screenSize*menuKeys.get(1).r/4.2;i++){
 									if(i==1)
 										for(int j=1;j<=menuKeys.size()-1;j++){
-											menuKeys.get(j).visible=true;
-
-											final int jj=j;
-											parentAct.runOnUiThread(new Runnable() {
-												public void run() {
-
-
-													menuKeys.get(jj).tv.setVisibility(View.VISIBLE);
-
-
-												}
-											});
+											menuKeys.get(j).setVisible(true);
 
 										}
 
-									try {
-										Thread.sleep(4);
-									} catch (InterruptedException e) {
 
-										e.printStackTrace();
-									}
-									for(int j=1;j<=menuKeys.size()-1;j++){
-										menuKeys.get(j).setLoc(x+(float)Math.sin((j/3d)*Math.PI)*i/200,
-												y+(float) Math.cos((j/3d)*Math.PI)*i/200);
 
-									}
-									java.lang.System.out.println();
+//									try {
+//										Thread.sleep(4);
+//									} catch (InterruptedException e) {
+//
+//										e.printStackTrace();
+//									}
+//
+//
+//									probably visibility has been applied on ui thread, motion starts here:
+
+
+
+
+
+
+
+//									for(int j=1;j<=menuKeys.size()-1;j++){
+//										menuKeys.get(j).setLoc(x+(float)Math.sin((j/3d)*Math.PI)*i/200,
+//												y+(float) Math.cos((j/3d)*Math.PI)*i/200);
+//
+//									}
+
+
+
+
+								}
+
+								for(int j=1;j<=menuKeys.size()-1;j++){
+
+
+
+
+
+
+											menuKeys.get(j).move(x+(float)Math.sin((j/3d)*Math.PI)*c*2,
+													y+(float) Math.cos((j/3d)*Math.PI)*c*2);
+
+
 
 
 								}
@@ -335,13 +352,16 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 					else{
 
 						for(int j=1;j<=menuKeys.size()-1;j++){
+
 							menuKeys.get(j).visible=false;
+							menuKeys.get(j).setLoc(x, y);
 							final int jj=j;
 							parentAct.runOnUiThread(new Runnable() {
 								public void run() {
 
 
-									menuKeys.get(jj).tv.setVisibility(View.GONE);
+									menuKeys.get(jj).tv.setVisibility(View.INVISIBLE);
+
 
 
 								}
@@ -356,16 +376,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 			}
 		}));
-		parentAct.runOnUiThread(new Runnable() {
-			public void run() {
 
-				menuKeys.get(0).tv.setVisibility(View.VISIBLE);
-
-
-
-
-			}
-		});
 
 		menuKeys.add(new utils.Button(x, y, c,"?",1, new onClick() {
 
@@ -379,7 +390,7 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 				parentAct.runOnUiThread(new Runnable() {
 					public void run() {
 
-						GLView.tv.setVisibility(GLView.tv.getVisibility()==View.GONE?View.VISIBLE:View.GONE);
+						GLView.tv.setVisibility(GLView.tv.getVisibility()!=VISIBLE?View.VISIBLE:View.INVISIBLE);
 
 					}
 				});
@@ -413,8 +424,50 @@ public class GLView extends GLSurfaceView implements Renderer ,OnTouchListener{
 
 			public void clicked(utils.Button btn) {
 
+
+
+
+
+
 			}
 		}));
+		menuKeys.get(1).click(x, y);
+
+		new Thread(new Runnable() {
+
+
+
+
+			public void run() {
+
+
+
+
+						menuKeys.get(0).setVisible(true);
+
+						menuKeys.get(0).moveText();
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						menuKeys.get(0).moveText();
+
+
+
+
+
+
+
+
+
+			}
+		}).start();
+
+
+
+
 
 
 
